@@ -84,6 +84,71 @@ function startObserver() {
     });
 }
 
+// 增加 add to 按鈕
+
+function addToButton(element, username) {
+  console.log('嘗試添加按鈕到元素:', element);
+    // 如果元素不存在，則不添加按鈕
+    if (!element) return;
+    // 檢查是否已經添加過按鈕
+    if (element.querySelector('.add-you-button')) return;
+    // 檢查是否已經在名單中
+    if (accountList.includes(username)) {
+        return;
+    }
+    // 創建按鈕元素
+    const button = document.createElement('button');
+    button.className = 'add-you-button';
+    button.textContent = '+ 小本本';
+
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        
+        // 檢查是否已經在名單中
+        if (accountList.includes(username)) {
+            alert(`帳號 @${username} 已經在小本本 ${listName} 中。`);
+            return;
+        }
+        
+        // 添加到名單
+        accountList.push(username);
+        chrome.storage.sync.set({accountList: accountList}, function() {
+            alert(`小本本 ${listName} 加入帳號 @${username} 成功。`);
+            // 移除所有現有標記
+            removeAllMarkers();
+            
+            // 重新標記
+            markAccounts();
+            
+            sendResponse({success: true});
+        });
+        e.stopPropagation();
+        return false;
+    });
+    // 將按鈕添加到元素中
+    // 如果目標元素的顯示方式是 flex 或 inline-flex，直接添加
+    const computedStyle = window.getComputedStyle(element);
+    if (computedStyle.display.includes('flex')) {
+        element.appendChild(button);
+    } else {
+        // 否則創建一個容器
+        const container = document.createElement('span');
+        container.style.display = 'inline-flex';
+        container.style.alignItems = 'center';
+        container.style.gap = '4px';
+        
+        // 將原內容移到容器中
+        const originalContent = element.innerHTML;
+        element.innerHTML = '';
+        container.innerHTML = originalContent;
+        container.appendChild(button);
+        element.appendChild(container);
+    }
+    // 標記按鈕已添加
+    element.setAttribute('data-add-you-button', 'true');
+}
+
 // 標記帳號
 function markAccounts() {
     if (accountList.length === 0) return;
@@ -95,7 +160,7 @@ function markAccounts() {
       // 僅匹配 "/@username" 或 "/@username?..."，不包含 "/@username/xxx"
       const isUserLink = /^\/@[^\/\?]+(\?.*)?$/.test(href);
       // 過濾掉含有 <img> 的 <a>
-      const hasImg = link.querySelector('img') !== null;
+      const hasImg = link.querySelectorAll('img, svg').length > 0;
       const isTab = link.getAttribute('aria-label') === '串文';
       return isUserLink && !hasImg && !isTab;
       });
@@ -109,7 +174,7 @@ function markAccounts() {
         if (!usernameMatch) return;
         
         const username = usernameMatch[1].toLowerCase();
-        
+        addToButton(link, username); // 添加 "加入帳號" 按鈕
         // 檢查是否在名單中
         if (accountList.includes(username)) {
             addMarker(link, username);
@@ -158,11 +223,11 @@ function addMarker(element, username) {
 
 // 移除所有標記
 function removeAllMarkers() {
-    const markers = document.querySelectorAll('.account-marker');
+    const markers = document.querySelectorAll('.account-marker, .add-you-button');
     markers.forEach(marker => marker.remove());
     
     // 清除標記屬性
-    const markedElements = document.querySelectorAll('[data-account-marked]');
+    const markedElements = document.querySelectorAll('[data-account-marked], [data-add-you-button]');
     markedElements.forEach(element => {
         element.removeAttribute('data-account-marked');
     });
