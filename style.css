@@ -1,0 +1,75 @@
+/* Threads 帳號標示器樣式 */
+
+.account-marker {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 16px !important;
+    height: 16px !important;
+    background-color: #ff4444 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    font-size: 10px !important;
+    margin-left: 4px !important;
+    cursor: help !important;
+    flex-shrink: 0 !important;
+    font-weight: bold !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    z-index: 1000 !important;
+    position: relative !important;
+    transition: transform 0.1s ease !important;
+}
+
+.account-marker:hover {
+    transform: scale(1.1) !important;
+}
+
+.account-marker-tooltip {
+    position: absolute !important;
+    bottom: 120% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    color: white !important;
+    padding: 6px 8px !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.2s !important;
+    z-index: 10000 !important;
+    font-weight: normal !important;
+    
+}
+
+.account-marker:hover .account-marker-tooltip {
+    opacity: 1 !important;
+}
+
+/* 確保標記在各種佈局中都能正確顯示 */
+a[href*="/@"] {
+    position: relative !important;
+}
+
+/* 針對不同的 Threads 佈局進行適配 */
+[data-testid*="user"] .account-marker,
+[role="link"] .account-marker {
+    margin-left: 6px !important;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .account-marker {
+        width: 14px !important;
+        height: 14px !important;
+        font-size: 9px !important;
+        margin-left: 3px !important;
+    }
+    
+    .account-marker-tooltip {
+        font-size: 11px !important;
+        padding: 5px 7px !important;
+    }
+}
