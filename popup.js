@@ -24,9 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 載入帳號名單
     function loadAccountList() {
-        chrome.storage.sync.get(['accountList'], function(result) {
+        chrome.storage.sync.get(['accountList', 'listName'], function(result) {
             if (result.accountList) {
                 accountListTextarea.value = result.accountList.join('\n');
+                if(result.listName) {
+                    listNameInput.value = result.listName;
+                }
                 updateCountInfo();
             }
         });
