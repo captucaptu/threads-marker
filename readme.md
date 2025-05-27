@@ -10,10 +10,13 @@
 
 ## 安裝方式
 
-1. 下載或 clone 此專案到本地資料夾
-2. 開啟 Chrome，進入 `chrome://extensions/`
-3. 開啟「開發人員模式」
-4. 點擊「載入未封裝項目」，選擇本專案資料夾
+已上架 Chrome 擴充商店：
+https://chromewebstore.google.com/detail/threads-marker/bjbddmekoaademeiaeggoejhbmhigbjh
+
+~~1. 下載或 clone 此專案到本地資料夾~~
+~~2. 開啟 Chrome，進入 `chrome://extensions/`~~
+~~3. 開啟「開發人員模式」~~
+~~4. 點擊「載入未封裝項目」，選擇本專案資料夾~~
 
 ## 使用說明
 
